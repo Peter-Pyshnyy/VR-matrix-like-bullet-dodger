@@ -25,5 +25,10 @@ public class ShootingController : MonoBehaviour
         Transform bulletPosition = spawnPoint[randomBullet];
         Instantiate(BulletPrefab, bulletPosition.position, bulletPosition.rotation);
 
+        // Unity already incorporates spatial (and also stereo audio)
+        AudioSource gunAudio = bulletPosition.GetComponent<AudioSource>();
+        if(gunAudio  != null){
+            gunAudio.Play();
+        }
     }
 }
