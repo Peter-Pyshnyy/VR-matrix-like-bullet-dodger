@@ -6,8 +6,18 @@ public class ShootingController : MonoBehaviour
     public GameObject BulletPrefab;
     public float shootingSpeed;
     public Transform[] spawnPoint;
+    public Transform cameraPos;
 
     float timer = 0.0f;
+
+    void Start()
+    {
+        foreach (Transform t in spawnPoint)
+        {
+            t.rotation =  Quaternion.LookRotation(cameraPos.position - t.position);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
