@@ -156,8 +156,6 @@ public class AudioController : MonoBehaviour
         // If angle is negative (Left), the Right ear is delayed.
         int leftDelay = (shootingAngle> 0) ? delaySamples : 0;
         int rightDelay = (shootingAngle< 0) ? delaySamples : 0;
-        Debug.Log("left delay " + leftDelay);
-        Debug.Log("right delay " + rightDelay);
 
         // 3. Process Audio (Circular Buffer)
         for (int i = 0; i < data.Length; i += channels)
