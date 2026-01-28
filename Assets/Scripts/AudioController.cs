@@ -1,12 +1,15 @@
-using System.ComponentModel.Design;
 using UnityEngine;
 
+
+public enum AudioType{None, ILD, ITD}
 [RequireComponent(typeof(AudioSource))]
 public class AudioController : MonoBehaviour
 {
     // this should be to make the singleton pattern
     public static AudioController Instance;
     
+
+    [SerializeField] private AudioType currentEffect = AudioType.None;
     [Range(0, 1)]
     public float volume = 1f;
     public int sampleRate = 44100;
@@ -17,14 +20,14 @@ public class AudioController : MonoBehaviour
     [Tooltip("Maximum ITD delay in milliseconds")]
     [SerializeField] private float maxHaasDelay = 20f;
 
-    private const float SpeedOfSound = 343;
-    private const float HeadRadius = 0.1f;
     
     // from the clip the Source is extracted
     private AudioSource bulletSound;
     private float[] soundData;
     private Transform viewPosition;
 
+    private float HeadRadius = 0.1f;
+    private float SpeedOfSound = 343f;
     private float[] leftDelayBuffer;
     private float[] rightDelayBuffer;
     private int bufferSize;
@@ -84,7 +87,7 @@ public class AudioController : MonoBehaviour
         shootingAngle = Mathf.Acos(Vector3.Dot(viewDirection, toAgent)); 
         shootingAngle = toAgent.x < 0 ? -shootingAngle: shootingAngle; // this should change the sign of the angle (left negative and right pos)
 
-        Debug.Log("Current angle of the shot "+ shootingAngle + " from " + shootingPosition);
+        //Debug.Log("Current angle of the shot "+ shootingAngle + " from " + shootingPosition);
 
         bulletSound.Play();
     }
@@ -98,23 +101,88 @@ public class AudioController : MonoBehaviour
             soundData[i] *= volume;
         }
 
-
-        ILD(data, channels);
+        switch (currentEffect)
+        {
+            case AudioType.ILD:
+                ILD(data, channels);
+                break;
+            case AudioType.ITD:
+                ITD(data, channels);
+                break;
+        }
     }
-
     void ILD(float[] data, int channels)
     {
-        // float theta = shootingAngle * (float)Mathf.PI / 180f; // transform to degree
-        // float intensity = Mathf.Sin(theta) * 0.5f + 0.5f; // so the right/left values with (sin(90)) won't be inaudible
-
-        // float intensityLeft = 1f - intensity;
-        // float intensityRigth = intensity;
+        // input of Sin has to be in radians
+        // this will do a remap to 0 (left) and 1 right
+        float intensity = Mathf.Sin(shootingAngle) * 0.5f + 0.5f; // so the right/left values with (sin(90)) won't be inaudible
+ 
+        float intensityLeft = 1f - intensity;
+        float intensityRigth = intensity;
 
         // channgels always 2 (stereo); data interleaved LRLRLR...
         for (int i = 0; i < data.Length; i += channels)
         {
-            // data[i] *= intensityLeft;
-            // data[i+1] *= intensityRigth;
+            data[i] *= intensityLeft;
+            data[i+1] *= intensityRigth;
+        }
+    }
+
+    float delay(float theta){
+        if(theta >= 0 && theta <= Mathf.PI /2){
+            return HeadRadius/ SpeedOfSound * (theta+Mathf.Sin(theta));
+        }else{
+            return  HeadRadius/ SpeedOfSound * (Mathf.PI - theta+Mathf.Sin(theta));
+        }
+    }
+    void ITD(float[] data, int channels)
+    {
+        // 1. Physics Math (Woodworth Model)
+        // We calculate the required delay in seconds based on the head radius and angle
+
+        float absTheta = Mathf.Abs(shootingAngle);
+
+        // Formula: Time = (r/c) * (theta + sin(theta))
+        float delaySeconds = delay(absTheta);
+
+        // Convert time to samples
+        int delaySamples = (int)(delaySeconds * sampleRate);
+
+        // Safety clamp to prevent reading outside the buffer
+        delaySamples = Mathf.Clamp(delaySamples, 0, bufferSize - 1);
+
+        // 2. Determine which ear is delayed
+        // If angle is positive (Right), the Left ear is delayed.
+        // If angle is negative (Left), the Right ear is delayed.
+        int leftDelay = (shootingAngle> 0) ? delaySamples : 0;
+        int rightDelay = (shootingAngle< 0) ? delaySamples : 0;
+        Debug.Log("left delay " + leftDelay);
+        Debug.Log("right delay " + rightDelay);
+
+        // 3. Process Audio (Circular Buffer)
+        for (int i = 0; i < data.Length; i += channels)
+        {
+
+
+            // --- WRITE STEP ---
+            // Store the current raw audio into the history buffers
+            leftDelayBuffer[leftWriteIndex] = data[i];
+            rightDelayBuffer[rightWriteIndex] = data[i + 1];
+
+            // --- READ STEP ---
+            // Calculate where to read from: "Current Write Position" minus "Delay"
+            // We add bufferSize before modulo (%) to handle wrapping around negative numbers
+            int lReadIndex = (leftWriteIndex - leftDelay + bufferSize) % bufferSize;
+            int rReadIndex = (rightWriteIndex - rightDelay + bufferSize) % bufferSize;
+
+            // Apply the delayed samples to the output
+            data[i] = leftDelayBuffer[lReadIndex];
+            data[i + 1] = rightDelayBuffer[rReadIndex];
+
+            // --- ADVANCE ---
+            // Move the write pointers forward
+            leftWriteIndex = (leftWriteIndex + 1) % bufferSize;
+            rightWriteIndex = (rightWriteIndex + 1) % bufferSize;
         }
     }
 }
