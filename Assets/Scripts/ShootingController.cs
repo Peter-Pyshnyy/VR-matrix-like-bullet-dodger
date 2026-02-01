@@ -6,7 +6,7 @@ public class ShootingController : MonoBehaviour
 
     public GameObject BulletPrefab;
     public float shootingSpeed;
-    public Transform[] spawnPoint;
+    public Transform[] agentPos;
     public Transform cameraPos;
 
     [Header("Shooting Audio")]
@@ -21,7 +21,7 @@ public class ShootingController : MonoBehaviour
 
     void Start()
     {
-        foreach (Transform t in spawnPoint)
+        foreach (Transform t in agentPos)
         {
             t.rotation =  Quaternion.LookRotation(cameraPos.position - t.position);
         }
@@ -37,15 +37,21 @@ public class ShootingController : MonoBehaviour
             StartCoroutine(shootRandom());
             timer = 0.0f;
         }
+
+        foreach (Transform t in agentPos)
+        {
+            print(t.GetChild(0).transform.position);
+        }
     }
 
-    IEnumerator shootRandom(){
-        int randomBullet = Random.Range(0, spawnPoint.Length);
-        Transform bulletPosition = spawnPoint[randomBullet];
+IEnumerator shootRandom(){
+        int randomBullet = Random.Range(0, agentPos.Length);
+        Transform bulletPosition = agentPos[randomBullet];
+        Transform audioPosition = bulletPosition.GetChild(0).transform;
         // play reload spatial audio
-        if(AudioController.Instance != null)
+        if (AudioController.Instance != null)
         {
-            AudioController.Instance.PlayAudio(bulletPosition.position, reloadClip);
+            AudioController.Instance.PlayAudio(audioPosition.position, reloadClip);
             Debug.Log("starting to wait");
             yield return new WaitForSeconds(reloadTime);
         }

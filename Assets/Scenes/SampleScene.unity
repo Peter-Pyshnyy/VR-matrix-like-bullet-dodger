@@ -175,16 +175,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint right
       objectReference: {fileID: 0}
+    - target: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.19
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
---- !u!4 &23399305 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
-  m_PrefabInstance: {fileID: 23399304}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &23399306 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 152310702302907057, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
@@ -221,12 +224,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletPrefab: {fileID: 2254653359266563905, guid: e2f2d78cee09395acab2d4aeb9e6dd0f, type: 3}
   shootingSpeed: 2
-  spawnPoint:
-  - {fileID: 1217023509}
-  - {fileID: 1374846057}
-  - {fileID: 23399305}
-  - {fileID: 0}
+  agentPos:
+  - {fileID: 1217023510}
+  - {fileID: 1374846058}
+  - {fileID: 23399306}
   cameraPos: {fileID: 399958657}
+  shootingClip: {fileID: 8300000, guid: 504768b7466b7c949a6ec45a6db9b11e, type: 3}
+  reloadClip: {fileID: 8300000, guid: cddcd362cb8510a4084e2adb0fab7894, type: 3}
+  reloadTime: 1
 --- !u!4 &124633639
 Transform:
   m_ObjectHideFlags: 0
@@ -451,9 +456,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa36e93314ded73eb016fead0c4f43b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentEffect: 2
   volume: 1
   sampleRate: 44100
-  bulletSoundClip: {fileID: 8300000, guid: 504768b7466b7c949a6ec45a6db9b11e, type: 3}
+  maxHaasDelay: 20
 --- !u!82 &325501546
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1366,11 +1372,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
---- !u!4 &1217023509 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
-  m_PrefabInstance: {fileID: 1217023508}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1217023510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 152310702302907057, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
@@ -1432,16 +1433,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint left
       objectReference: {fileID: 0}
+    - target: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
---- !u!4 &1374846057 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6154207377303317287, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
-  m_PrefabInstance: {fileID: 1374846056}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1374846058 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 152310702302907057, guid: e74e75629c1c45124a90fa49a55cc5af, type: 3}
@@ -1470,7 +1474,7 @@ PrefabInstance:
       objectReference: {fileID: 1826880380}
     - target: {fileID: 2156611272426543629, guid: 64b982b258c0a1387b5d03e8f6786dbe, type: 3}
       propertyPath: filterType
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5319262091783393671, guid: 64b982b258c0a1387b5d03e8f6786dbe, type: 3}
       propertyPath: m_LocalPosition.x
