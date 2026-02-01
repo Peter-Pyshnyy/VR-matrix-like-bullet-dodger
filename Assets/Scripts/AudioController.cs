@@ -16,11 +16,11 @@ public class AudioController : MonoBehaviour
 
     [Header("Audio Sample")]
     // the SoundClip is the whole data from the sound
-    public AudioClip bulletSoundClip;
     [Tooltip("Maximum ITD delay in milliseconds")]
     [SerializeField] private float maxHaasDelay = 20f;
 
     
+    private AudioClip bulletSoundClip;
     // from the clip the Source is extracted
     private AudioSource bulletSound;
     private float[] soundData;
@@ -33,48 +33,65 @@ public class AudioController : MonoBehaviour
     private int bufferSize;
     private int leftWriteIndex = 0;
     private int rightWriteIndex = 0;
-    private int leftReadIndex = 0;
-    private int rightReadIndex = 0;
     private int leftDelaySamples;
     private int rightDelaySamples;
 
     // the angle from which the bullet was shot in relation to main camera
     private float shootingAngle;
+    
+    // Flag to track if audio is ready (thread-safe for OnAudioFilterRead)
+    private bool isAudioInitialized = false;
 
     void Awake(){
         Instance = this;
+        viewPosition = Camera.main.transform;
         bulletSound = GetComponent<AudioSource>();
-        soundData = new float[bulletSoundClip.samples * bulletSoundClip.channels];
-
-        bufferSize = Mathf.CeilToInt(maxHaasDelay/1000f * sampleRate);
-        leftDelayBuffer = new float[bufferSize];
-        rightDelayBuffer = new float[bufferSize];
     }
 
     void Start()
     {
-        bulletSound.clip = bulletSoundClip;
-        bulletSound.loop = false; 
+        // bulletSound.clip = bulletSoundClip;
+        // bulletSound.loop = false; 
         
         // if the player view direction were to move, then this in the update function
         viewPosition = Camera.main.transform;
-        if(soundData == null){
-            soundData = new float[bulletSoundClip.samples * bulletSoundClip.channels];
-        }
+        // if(soundData == null){
+        //     soundData = new float[bulletSoundClip.samples * bulletSoundClip.channels];
+        // }
 
     }
 
     void OnValidate(){
 
-        if (bulletSound== null)
-        {
-            bulletSound= GetComponent<AudioSource>();
-        }
+        // if (bulletSound== null)
+        // {
+        //     bulletSound= GetComponent<AudioSource>();
+        // }
+    }
+
+    void initData(AudioClip clip)
+    {
+        bulletSoundClip = clip;
+        bulletSound.clip = bulletSoundClip;
+        bulletSound.loop = false;
         bulletSound.hideFlags = HideFlags.HideInInspector;
+
+        soundData = new float[bulletSoundClip.samples * bulletSoundClip.channels];
+        bufferSize = Mathf.CeilToInt(maxHaasDelay/1000f * sampleRate);
+        leftDelayBuffer = new float[bufferSize];
+        rightDelayBuffer = new float[bufferSize];
+        
+        isAudioInitialized = true;
     }
 
     // this should be used by ShootingController to play the audio
-    public void PlayAudio(Vector3 shootingPosition){
+    public void PlayAudio(Vector3 shootingPosition, AudioClip clip){
+        // load and process the AudioClip data
+        initData(clip);
+        
+        // Get the current view position if not set
+        if(viewPosition == null) viewPosition = Camera.main.transform;
+
         // viewPosRight will be the vector to the right direction of the position of the player
         Vector3 viewDirection = viewPosition.forward;
         viewDirection =viewDirection.normalized;
@@ -95,6 +112,7 @@ public class AudioController : MonoBehaviour
     // this method is called by Unity and is responsible for stereo audio
     void OnAudioFilterRead(float[] data, int channels)
     {
+        if(!isAudioInitialized || soundData == null) return;
         if(channels < 2) return;
 
         for(int i = 0; i < soundData.Length; i++){

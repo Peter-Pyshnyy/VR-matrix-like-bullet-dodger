@@ -231,6 +231,8 @@ MonoBehaviour:
   - {fileID: 1374846057}
   - {fileID: 23399305}
   cameraPos: {fileID: 399958657}
+  shootingClip: {fileID: 8300000, guid: 504768b7466b7c949a6ec45a6db9b11e, type: 3}
+  reloadClip: {fileID: 8300000, guid: cddcd362cb8510a4084e2adb0fab7894, type: 3}
 --- !u!4 &124633639
 Transform:
   m_ObjectHideFlags: 0
@@ -473,7 +475,6 @@ MonoBehaviour:
   currentEffect: 1
   volume: 1
   sampleRate: 44100
-  bulletSoundClip: {fileID: 8300000, guid: 504768b7466b7c949a6ec45a6db9b11e, type: 3}
   maxHaasDelay: 20
 --- !u!82 &325501546
 AudioSource:
@@ -486,7 +487,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 504768b7466b7c949a6ec45a6db9b11e, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

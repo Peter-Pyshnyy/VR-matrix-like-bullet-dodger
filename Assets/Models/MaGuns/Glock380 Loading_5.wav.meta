@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a0df2b0505385214d9b39940fadff810
+guid: cddcd362cb8510a4084e2adb0fab7894
 AudioImporter:
   externalObjects: {}
   serializedVersion: 6
@@ -25,5 +25,5 @@ AssetOrigin:
   productId: 148666
   packageName: MaGuns
   packageVersion: 1.0
-  assetPath: Assets/Models/MaGuns/Revolver-22-Smith Shot Close_4.wav
+  assetPath: Assets/MaGuns/Glock380 Loading_5.wav
   uploadId: 316273

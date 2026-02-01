@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ShootingController : MonoBehaviour
@@ -8,7 +9,15 @@ public class ShootingController : MonoBehaviour
     public Transform[] spawnPoint;
     public Transform cameraPos;
 
+    [Header("Shooting Audio")]
+    public AudioClip shootingClip;
+    [Header("Reloading Audio")]
+    public AudioClip reloadClip;
+    [Range(1, 5)]
+    public float reloadTime = 1;
+
     float timer = 0.0f;
+    float reloadTimer = 0.0f;
 
     void Start()
     {
@@ -25,20 +34,23 @@ public class ShootingController : MonoBehaviour
         timer += Time.deltaTime;
         if(timer > shootingSpeed) 
         {
-            shootRandom();
+            StartCoroutine(shootRandom());
             timer = 0.0f;
         }
     }
 
-    void shootRandom(){
+    IEnumerator shootRandom(){
         int randomBullet = Random.Range(0, spawnPoint.Length);
         Transform bulletPosition = spawnPoint[randomBullet];
-        Instantiate(BulletPrefab, bulletPosition.position, bulletPosition.rotation);
-
-        // Unity already incorporates spatial (and also stereo audio)
-       if(AudioController.Instance != null)
+        // play reload spatial audio
+        if(AudioController.Instance != null)
         {
-            AudioController.Instance.PlayAudio(bulletPosition.position);
-        } 
+            AudioController.Instance.PlayAudio(bulletPosition.position, reloadClip);
+            Debug.Log("starting to wait");
+            yield return new WaitForSeconds(reloadTime);
+        }
+
+        Instantiate(BulletPrefab, bulletPosition.position, bulletPosition.rotation);
+        AudioController.Instance.PlayAudio(bulletPosition.position, shootingClip);
     }
 }
