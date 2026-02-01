@@ -4,6 +4,7 @@ using UnityEngine;
 public class ShootingController : MonoBehaviour
 {
 
+    public CollisionScript collision;
     public GameObject BulletPrefab;
     public float shootingSpeed;
     public Transform[] agentPos;
@@ -32,7 +33,7 @@ public class ShootingController : MonoBehaviour
     {
         
         timer += Time.deltaTime;
-        if(timer > shootingSpeed) 
+        if(timer > shootingSpeed && collision.runGame) 
         {
             StartCoroutine(shootRandom());
             timer = 0.0f;
