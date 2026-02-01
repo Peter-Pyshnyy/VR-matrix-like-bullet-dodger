@@ -18,6 +18,5 @@ public class HealthScript : MonoBehaviour
     void updateText()
     {
         healthText.text = "Health: " + health.ToString();
-        
     }
 }

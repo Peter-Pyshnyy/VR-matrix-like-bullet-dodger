@@ -23,7 +23,7 @@ public class ShootingController : MonoBehaviour
     {
         foreach (Transform t in agentPos)
         {
-            t.rotation =  Quaternion.LookRotation(cameraPos.position - t.position);
+            t.rotation = Quaternion.LookRotation((cameraPos.position - new Vector3(0.0f, 0.0f, 0.15f)) - t.position);
         }
     }
 
@@ -36,11 +36,6 @@ public class ShootingController : MonoBehaviour
         {
             StartCoroutine(shootRandom());
             timer = 0.0f;
-        }
-
-        foreach (Transform t in agentPos)
-        {
-            print(t.GetChild(0).transform.position);
         }
     }
 
