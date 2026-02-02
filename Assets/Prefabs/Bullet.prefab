@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  lifeTime: 1
+  lifeTime: 2
 --- !u!33 &1595070927082734287
 MeshFilter:
   m_ObjectHideFlags: 0

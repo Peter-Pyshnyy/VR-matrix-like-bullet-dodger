@@ -21,16 +21,18 @@ public class ShootingController : MonoBehaviour
 
     void Start()
     {
-        foreach (Transform t in agentPos)
-        {
-            t.rotation = Quaternion.LookRotation((cameraPos.position - new Vector3(0.0f, 0.0f, 0.15f)) - t.position);
-        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        foreach (Transform t in agentPos)
+        {
+            //t.rotation = Quaternion.LookRotation((cameraPos.position - new Vector3(0.0f, 0.0f, 0.15f)) - t.position);
+            t.rotation = Quaternion.LookRotation(cameraPos.position - t.position);
+        }
+
         timer += Time.deltaTime;
         if(timer > shootingSpeed && runGame) 
         {
