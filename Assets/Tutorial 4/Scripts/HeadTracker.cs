@@ -54,14 +54,18 @@ namespace Tutorial_4
 
         private void Update()
         {
+
+            
             if (_webCamTexture == null)
             {
+                print("webcam null");
                 return;
             }
             
             _detector.ProcessImage(_webCamTexture, threshold);
             if (_detector.Detections.Length == 0)
             {
+                print("no face bruh");
                 DetectedFace = Vector3.zero;
                 return;
             }

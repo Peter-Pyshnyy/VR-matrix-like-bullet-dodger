@@ -222,7 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953736c00cef7c6698ecd68d7a6507de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collision: {fileID: 739633566}
   BulletPrefab: {fileID: 2254653359266563905, guid: e2f2d78cee09395acab2d4aeb9e6dd0f, type: 3}
   shootingSpeed: 2
   agentPos:
@@ -233,6 +232,7 @@ MonoBehaviour:
   shootingClip: {fileID: 8300000, guid: 504768b7466b7c949a6ec45a6db9b11e, type: 3}
   reloadClip: {fileID: 8300000, guid: cddcd362cb8510a4084e2adb0fab7894, type: 3}
   reloadTime: 1
+  runGame: 1
 --- !u!4 &124633639
 Transform:
   m_ObjectHideFlags: 0
@@ -1100,7 +1100,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.16389, y: 0.16389, z: 0.16389}
+  m_LocalScale: {x: 0.20000002, y: 0.20000002, z: 0.20000002}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 399958657}
@@ -1239,8 +1239,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c98cd3f38fe98b5b83d93907b4c07db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOver: {fileID: 1320059737}
-  runGame: 1
+  shootingController: {fileID: 124633638}
+  gameOver: {fileID: 1528831996}
 --- !u!1001 &762139234
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1569,7 +1569,7 @@ PrefabInstance:
       objectReference: {fileID: 1736608056}
     - target: {fileID: 769287877935953220, guid: 49c66a2318892af4190caa082d868929, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 769287877935953220, guid: 49c66a2318892af4190caa082d868929, type: 3}
       propertyPath: projectionPlane
@@ -1889,7 +1889,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1320059736
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1923,6 +1923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 455a8217f07cb7c02a704d30127c4441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootingController: {fileID: 124633638}
 --- !u!114 &1320059738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2186,7 +2187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1528831994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2429,7 +2430,7 @@ PrefabInstance:
       objectReference: {fileID: 1826880380}
     - target: {fileID: 2156611272426543629, guid: 64b982b258c0a1387b5d03e8f6786dbe, type: 3}
       propertyPath: filterType
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5319262091783393671, guid: 64b982b258c0a1387b5d03e8f6786dbe, type: 3}
       propertyPath: m_LocalPosition.x
